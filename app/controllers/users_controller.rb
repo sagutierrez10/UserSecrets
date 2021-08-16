@@ -5,6 +5,7 @@ class UsersController < ApplicationController
   def show
     p params[:id]
     @user = User.find(params[:id])
+    @secrets = User.find(params[:id]).secrets
   end
   def edit
     @user = User.find(params[:id])
