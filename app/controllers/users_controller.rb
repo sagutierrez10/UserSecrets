@@ -1,9 +1,12 @@
 class UsersController < ApplicationController
+
+  skip_before_action :require_login, only: [:new, :create]
+  before_action :require_rightuser, only:[:show, :edit, :update, :destroy]
+
   def new
   end
 
   def show
-    p params[:id]
     @user = User.find(params[:id])
     @secrets = User.find(params[:id]).secrets
   end
@@ -43,5 +46,10 @@ class UsersController < ApplicationController
       params.require(:user).permit(:name, :email, :password, :password_confirmation)
     end
 
+  def require_rightuser
+    if current_user != User.find(params[:id])
+      redirect_to "/users/#{session[:user_id]}"
+    end
+  end
 
 end

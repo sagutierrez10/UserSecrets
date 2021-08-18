@@ -1,9 +1,15 @@
 Rails.application.routes.draw do
+  get 'likes/create'
+
+  get 'likes/destroy'
+  get 'likes/create'
+
   resources :secrets, only:[:index, :create, :destroy]
 
   get 'sessions/new' => 'sessions#new'
   post 'sessions' => 'sessions#create'
   delete 'sessions/:id' => 'sessions#destroy'
+  resources :likes, only: [:create, :destroy]
   resources :users, only: [:show, :new, :create, :edit, :update, :destroy]
 
   # The priority is based upon order of creation: first created -> highest priority.

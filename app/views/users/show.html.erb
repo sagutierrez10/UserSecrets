@@ -1,5 +1,7 @@
 <h1><%= @user.name %></h1>
+
 <form action="/secrets" method="post">
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
 <label> New Secret:</label><br><br>
 <textarea id="content" name="secret[content]" rows="4" cols="50"> </textarea>
 <br><br>
@@ -12,6 +14,7 @@
   <tr>
     <th>secrets</th>
     <th></th>
+    <th></th>
     <th>Secrets Liked</th>
   </tr>
   </thead>
@@ -19,6 +22,7 @@
   <% @secrets.each do |secret| %>
   <tr>
     <td><%= secret.content %></td>
+    <td><%= secret.likes.count %></td>
     <form action="/secrets/<%= secret.id %>" method="post">
       <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
       <input type="hidden" name="_method" value="delete"/>
@@ -27,14 +31,12 @@
         <td><button type="submit">Delete Secret</button></td>
       <% end %>
     </form>
-    <td><% secret.likes.count %></td>
+    <% if current_user.likes.where(secret_id: secret.id).exists? %>
+    <td><%= secret.content %></td>
+    <td><%= secret.likes.count %></td>
+    <% end %>
   </tr>
   <% end %>
-  <tr>
-    <td>likes</td>
-    <td></td>
-    <td>likes</td>
-  </tr>
   </tbody>
 </table>
 <br><br>
